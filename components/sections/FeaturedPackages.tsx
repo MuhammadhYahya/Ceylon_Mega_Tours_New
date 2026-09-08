@@ -2,9 +2,12 @@ import { ArrowRight } from "lucide-react";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { ButtonLink } from "@/components/ui/Button";
 import PackageCard from "@/components/ui/PackageCard";
-import { featuredPackages } from "@/lib/content/packages";
+import { getTourPackages } from "@/lib/sanity/queries";
 
-export default function FeaturedPackages() {
+export default async function FeaturedPackages() {
+  const packages = await getTourPackages();
+  const featuredPackages = packages.filter((p) => p.featured);
+
   return (
     <section id="packages" className="bg-sand-100/70 py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-5 md:px-8">

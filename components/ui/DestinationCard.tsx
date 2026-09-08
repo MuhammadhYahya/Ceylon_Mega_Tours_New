@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { blurProps } from "@/lib/images";
+import { mediaBlurProps } from "@/lib/images";
 import type { Destination } from "@/lib/types";
 
 export default function DestinationCard({ dest }: { dest: Destination }) {
@@ -11,7 +11,7 @@ export default function DestinationCard({ dest }: { dest: Destination }) {
     >
       <Image
         src={dest.image.src}
-        {...blurProps(dest.image.src)}
+        {...mediaBlurProps(dest.image)}
         alt={dest.image.alt}
         fill
         sizes="(max-width: 767px) 100vw, 33vw"

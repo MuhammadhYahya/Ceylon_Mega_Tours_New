@@ -3,16 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MessageCircle } from "lucide-react";
-import { blurProps } from "@/lib/images";
+import { mediaBlurProps } from "@/lib/images";
 import { ButtonLink } from "@/components/ui/Button";
 import PackageCard from "@/components/ui/PackageCard";
-import { destinations, getDestinationBySlug } from "@/lib/content/destinations";
-import { packages } from "@/lib/content/packages";
+import { getDestinations, getDestinationBySlug, getTourPackages } from "@/lib/sanity/queries";
 import { whatsappLink } from "@/lib/site";
 
 type Params = { slug: string };
 
-export function generateStaticParams(): Params[] {
+export async function generateStaticParams(): Promise<Params[]> {
+  const destinations = await getDestinations();
   return destinations.map((d) => ({ slug: d.slug }));
 }
 
@@ -22,7 +22,7 @@ export async function generateMetadata({
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const dest = getDestinationBySlug(slug);
+  const dest = await getDestinationBySlug(slug);
   if (!dest) return {};
 
   return {
@@ -39,9 +39,10 @@ export default async function DestinationDetailPage({
   params: Promise<Params>;
 }) {
   const { slug } = await params;
-  const dest = getDestinationBySlug(slug);
+  const dest = await getDestinationBySlug(slug);
   if (!dest) notFound();
 
+  const packages = await getTourPackages();
   const relatedTours = packages.filter((p) => dest.relatedTourSlugs.includes(p.slug));
 
   return (
@@ -58,7 +59,7 @@ export default async function DestinationDetailPage({
         <div className="relative aspect-[4/3] overflow-hidden rounded-card shadow-lift md:order-2">
           <Image
             src={dest.image.src}
-            {...blurProps(dest.image.src)}
+            {...mediaBlurProps(dest.image)}
             alt={dest.image.alt}
             fill
             priority

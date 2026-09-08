@@ -2,32 +2,34 @@ import { defineField, defineType } from "sanity";
 
 export const tourPackage = defineType({
   name: "tourPackage",
-  title: "Турпакет",
+  title: "Tour Package",
   type: "document",
   fields: [
     defineField({
       name: "title",
-      title: "Название",
+      title: "Title",
       type: "string",
       validation: (r) => r.required(),
     }),
     defineField({
       name: "slug",
-      title: "Ссылка (slug)",
+      title: "Slug",
       type: "slug",
       options: { source: "title", maxLength: 96 },
       validation: (r) => r.required(),
     }),
     defineField({
       name: "summary",
-      title: "Краткое описание",
+      title: "Summary",
       type: "text",
       rows: 3,
       validation: (r) => r.required().max(220),
     }),
     defineField({
       name: "category",
-      title: "Категория",
+      title: "Category",
+      description:
+        "Site content — the value shown as the category badge on the site is in Russian, since the site is Russian-only.",
       type: "string",
       options: {
         list: [
@@ -43,37 +45,38 @@ export const tourPackage = defineType({
     }),
     defineField({
       name: "priceUsd",
-      title: "Цена от (USD)",
+      title: "Price from (USD)",
       type: "number",
       description:
-        "Необязательно. Если поле пустое, цена на сайте не показывается вообще. Заполните, когда будете готовы её опубликовать.",
+        "Optional. If left empty, no price is shown on the site at all. Fill in when ready to publish a price.",
       validation: (r) => r.positive(),
     }),
     defineField({
       name: "duration",
-      title: "Длительность",
+      title: "Duration",
       type: "string",
-      description: "Например: 5 дней",
+      description: 'Site content, in Russian. Example: "5 дней"',
       validation: (r) => r.required(),
     }),
     defineField({
       name: "difficulty",
-      title: "Сложность",
+      title: "Difficulty",
+      description: "Site content — value shown on the site is in Russian.",
       type: "string",
       options: { list: ["Лёгкая", "Средняя", "Высокая"] },
       validation: (r) => r.required(),
     }),
     defineField({
       name: "image",
-      title: "Главное фото",
+      title: "Main photo",
       type: "image",
       options: { hotspot: true },
       fields: [
         defineField({
           name: "alt",
-          title: "Альтернативный текст",
+          title: "Alt text",
           type: "string",
-          description: "Описание фото для читателей экрана и поисковиков.",
+          description: "Site content, in Russian — read by screen readers and search engines.",
           validation: (r) => r.required(),
         }),
       ],
@@ -81,29 +84,30 @@ export const tourPackage = defineType({
     }),
     defineField({
       name: "featured",
-      title: "Показывать на главной",
+      title: "Show on homepage",
       type: "boolean",
       initialValue: false,
     }),
     defineField({
       name: "highlights",
-      title: "Ключевые моменты",
+      title: "Highlights",
+      description: "Site content, in Russian — one bullet per line.",
       type: "array",
       of: [{ type: "string" }],
     }),
     defineField({
       name: "itinerary",
-      title: "Маршрут по дням",
+      title: "Day-by-day itinerary",
       type: "array",
       of: [
         {
           type: "object",
           fields: [
-            defineField({ name: "day", title: "День", type: "string" }),
-            defineField({ name: "title", title: "Заголовок", type: "string" }),
+            defineField({ name: "day", title: "Day", type: "string" }),
+            defineField({ name: "title", title: "Title", type: "string" }),
             defineField({
               name: "description",
-              title: "Описание",
+              title: "Description",
               type: "text",
               rows: 3,
             }),
@@ -114,13 +118,14 @@ export const tourPackage = defineType({
     }),
     defineField({
       name: "inclusions",
-      title: "Что включено",
+      title: "What's included",
+      description: "Site content, in Russian — one line per item.",
       type: "array",
       of: [{ type: "string" }],
     }),
     defineField({
       name: "order",
-      title: "Порядок сортировки",
+      title: "Sort order",
       type: "number",
       initialValue: 0,
     }),

@@ -1,6 +1,6 @@
 import { Compass, PlaneLanding, CarFront } from "lucide-react";
 import SectionHeader from "@/components/ui/SectionHeader";
-import { services } from "@/lib/content/services";
+import { getServices } from "@/lib/sanity/queries";
 import type { Service } from "@/lib/types";
 
 const icons: Record<Service["icon"], typeof Compass> = {
@@ -9,7 +9,9 @@ const icons: Record<Service["icon"], typeof Compass> = {
   car: CarFront,
 };
 
-export default function Services() {
+export default async function Services() {
+  const services = await getServices();
+
   return (
     <section id="services" className="mx-auto max-w-7xl px-5 py-20 md:px-8 md:py-28">
       <SectionHeader
@@ -23,7 +25,7 @@ export default function Services() {
           const Icon = icons[s.icon];
           return (
             <li
-              key={s.slug}
+              key={s.icon}
               className="reveal group rounded-card border border-sand-200 bg-sand-100/60 p-8 transition-colors hover:border-forest-200 hover:bg-sand-100"
             >
               <span className="grid h-12 w-12 place-items-center rounded-full bg-forest-900 text-sand-50">

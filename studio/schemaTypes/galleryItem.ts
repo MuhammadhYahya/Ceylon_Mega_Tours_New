@@ -2,29 +2,29 @@ import { defineField, defineType } from "sanity";
 
 export const galleryItem = defineType({
   name: "galleryItem",
-  title: "Фото галереи",
+  title: "Gallery Photo",
   type: "document",
   fields: [
     defineField({
       name: "image",
-      title: "Фото",
+      title: "Photo",
       type: "image",
       options: { hotspot: true },
       fields: [
         defineField({
           name: "alt",
-          title: "Альтернативный текст",
+          title: "Alt text",
           type: "string",
           validation: (r) => r.required(),
         }),
       ],
       validation: (r) => r.required(),
     }),
-    defineField({ name: "title", title: "Подпись", type: "string" }),
-    defineField({ name: "tag", title: "Метка", type: "string" }),
+    defineField({ name: "title", title: "Caption", type: "string" }),
+    defineField({ name: "tag", title: "Tag", type: "string" }),
     defineField({
       name: "order",
-      title: "Порядок сортировки",
+      title: "Sort order",
       type: "number",
       initialValue: 0,
     }),

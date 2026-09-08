@@ -2,25 +2,25 @@ import { defineField, defineType } from "sanity";
 
 export const faq = defineType({
   name: "faq",
-  title: "Вопрос и ответ",
+  title: "FAQ",
   type: "document",
   fields: [
     defineField({
       name: "question",
-      title: "Вопрос",
+      title: "Question",
       type: "string",
       validation: (r) => r.required(),
     }),
     defineField({
       name: "answer",
-      title: "Ответ",
+      title: "Answer",
       type: "array",
       of: [{ type: "block" }],
       validation: (r) => r.required(),
     }),
     defineField({
       name: "order",
-      title: "Порядок сортировки",
+      title: "Sort order",
       type: "number",
       initialValue: 0,
     }),

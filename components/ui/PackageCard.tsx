@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Clock, Gauge } from "lucide-react";
-import { blurProps } from "@/lib/images";
+import { mediaBlurProps } from "@/lib/images";
 import type { TourPackage } from "@/lib/types";
 
 const priceFormatter = new Intl.NumberFormat("ru-RU");
@@ -15,7 +15,7 @@ export default function PackageCard({ pkg }: { pkg: TourPackage }) {
       <div className="relative aspect-[3/2] overflow-hidden">
         <Image
           src={pkg.image.src}
-          {...blurProps(pkg.image.src)}
+          {...mediaBlurProps(pkg.image)}
           alt={pkg.image.alt}
           fill
           sizes="(max-width: 767px) 100vw, 33vw"

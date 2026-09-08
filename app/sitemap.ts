@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
-import { packages } from "@/lib/content/packages";
-import { destinations } from "@/lib/content/destinations";
+import { getTourPackages, getDestinations } from "@/lib/sanity/queries";
 import { site } from "@/lib/site";
 
 const staticRoutes = [
@@ -14,8 +13,9 @@ const staticRoutes = [
   "/privacy",
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  const [packages, destinations] = await Promise.all([getTourPackages(), getDestinations()]);
 
   return [
     ...staticRoutes.map((path) => ({

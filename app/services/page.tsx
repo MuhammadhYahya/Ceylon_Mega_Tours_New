@@ -3,7 +3,7 @@ import { Check, Compass, PlaneLanding, CarFront } from "lucide-react";
 import PageHero from "@/components/ui/PageHero";
 import { ButtonLink } from "@/components/ui/Button";
 import EnquiryCta from "@/components/sections/EnquiryCta";
-import { services } from "@/lib/content/services";
+import { getServices } from "@/lib/sanity/queries";
 import { whatsappLink } from "@/lib/site";
 import type { Service } from "@/lib/types";
 
@@ -20,7 +20,9 @@ const icons: Record<Service["icon"], typeof Compass> = {
   car: CarFront,
 };
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const services = await getServices();
+
   return (
     <>
       <PageHero
@@ -35,7 +37,7 @@ export default function ServicesPage() {
             const Icon = icons[s.icon];
             return (
               <li
-                key={s.slug}
+                key={s.icon}
                 className="reveal grid gap-8 rounded-card border border-sand-200 bg-sand-50 p-8 md:grid-cols-[auto_1fr] md:p-10"
               >
                 <span className="grid h-14 w-14 place-items-center rounded-full bg-forest-900 text-sand-50">

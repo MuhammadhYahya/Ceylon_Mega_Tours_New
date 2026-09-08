@@ -2,19 +2,19 @@ import { defineField, defineType } from "sanity";
 
 export const review = defineType({
   name: "review",
-  title: "Отзыв",
+  title: "Review",
   type: "document",
   fields: [
     defineField({
       name: "name",
-      title: "Имя гостя",
+      title: "Guest name",
       type: "string",
       validation: (r) => r.required(),
     }),
-    defineField({ name: "location", title: "Город или страна", type: "string" }),
+    defineField({ name: "location", title: "City or country", type: "string" }),
     defineField({
       name: "rating",
-      title: "Оценка",
+      title: "Rating",
       type: "number",
       options: { list: [1, 2, 3, 4, 5] },
       initialValue: 5,
@@ -22,24 +22,26 @@ export const review = defineType({
     }),
     defineField({
       name: "quote",
-      title: "Текст отзыва",
+      title: "Review text",
       type: "text",
       rows: 4,
       validation: (r) => r.required(),
     }),
-    defineField({ name: "date", title: "Дата поездки", type: "date" }),
+    defineField({ name: "date", title: "Trip date", type: "date" }),
     defineField({
       name: "source",
-      title: "Источник",
+      title: "Source",
+      description: "Internal only — never shown to site visitors.",
       type: "string",
-      options: { list: ["Google", "WhatsApp", "Email", "Сайт"] },
+      options: { list: ["Google", "WhatsApp", "Email", "Website"] },
       initialValue: "Google",
     }),
     defineField({
       name: "published",
-      title: "Опубликован",
+      title: "Published",
       type: "boolean",
-      description: "Отзывы показываются на сайте только после проверки.",
+      description:
+        "Guest-submitted reviews (via the site's own form) are created with this already set to true — this toggle mainly matters for a review you draft by hand here in Studio.",
       initialValue: false,
     }),
   ],

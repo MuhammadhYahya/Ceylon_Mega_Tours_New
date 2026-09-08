@@ -2,9 +2,10 @@ import { ArrowRight } from "lucide-react";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { ButtonLink } from "@/components/ui/Button";
 import DestinationCard from "@/components/ui/DestinationCard";
-import { destinations } from "@/lib/content/destinations";
+import { getDestinations } from "@/lib/sanity/queries";
 
-export default function Destinations() {
+export default async function Destinations() {
+  const destinations = await getDestinations();
   const featured = destinations.slice(0, 3);
 
   return (

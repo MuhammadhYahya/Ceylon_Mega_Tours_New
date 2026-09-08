@@ -6,21 +6,21 @@ import { defineField, defineType } from "sanity";
  */
 export const siteSettings = defineType({
   name: "siteSettings",
-  title: "Настройки сайта",
+  title: "Site Settings",
   type: "document",
   fields: [
     defineField({
       name: "whatsappNumber",
-      title: "Номер WhatsApp",
+      title: "WhatsApp number",
       type: "string",
-      description: "Только цифры, без + и пробелов. Например: 94778000008",
+      description: "Digits only, no + or spaces. Example: 94778000008",
       validation: (r) => r.required().regex(/^\d{8,15}$/),
     }),
     defineField({
       name: "phoneDisplay",
-      title: "Телефон для показа",
+      title: "Phone (display format)",
       type: "string",
-      description: "Как номер отображается на сайте. Например: +94 77 800 0008",
+      description: "How the number is shown on the site. Example: +94 77 800 0008",
       validation: (r) => r.required(),
     }),
     defineField({
@@ -31,36 +31,38 @@ export const siteSettings = defineType({
     }),
     defineField({
       name: "heroTitle",
-      title: "Заголовок на главной",
+      title: "Homepage headline",
+      description: "Site content, in Russian.",
       type: "string",
       validation: (r) => r.max(80),
     }),
     defineField({
       name: "heroText",
-      title: "Текст под заголовком",
+      title: "Homepage subtext",
+      description: "Site content, in Russian.",
       type: "text",
       rows: 3,
       validation: (r) => r.max(300),
     }),
     defineField({
       name: "yearsExperience",
-      title: "Лет опыта",
+      title: "Years of experience",
       type: "string",
-      description: "Например: 15+",
+      description: 'Example: "15+"',
     }),
     defineField({
       name: "googleRating",
-      title: "Оценка Google",
+      title: "Google rating",
       type: "number",
       validation: (r) => r.min(0).max(5),
     }),
     defineField({
       name: "googleReviewCount",
-      title: "Количество отзывов Google",
+      title: "Google review count",
       type: "number",
     }),
   ],
   preview: {
-    prepare: () => ({ title: "Настройки сайта" }),
+    prepare: () => ({ title: "Site Settings" }),
   },
 });

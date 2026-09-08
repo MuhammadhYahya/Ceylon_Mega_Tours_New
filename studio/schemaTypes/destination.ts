@@ -2,45 +2,45 @@ import { defineField, defineType } from "sanity";
 
 export const destination = defineType({
   name: "destination",
-  title: "Направление",
+  title: "Destination",
   type: "document",
   fields: [
     defineField({
       name: "title",
-      title: "Название",
+      title: "Title",
       type: "string",
       validation: (r) => r.required(),
     }),
     defineField({
       name: "slug",
-      title: "Ссылка (slug)",
+      title: "Slug",
       type: "slug",
       options: { source: "title", maxLength: 96 },
       validation: (r) => r.required(),
     }),
     defineField({
       name: "tag",
-      title: "Метка",
+      title: "Tag",
       type: "string",
-      description: "Например: Культура, Чайный регион, Южное побережье",
+      description: 'Site content, in Russian. Example: "Культура", "Чайный регион"',
       validation: (r) => r.required(),
     }),
     defineField({
       name: "summary",
-      title: "Краткое описание",
+      title: "Summary",
       type: "text",
       rows: 3,
       validation: (r) => r.required().max(220),
     }),
     defineField({
       name: "image",
-      title: "Фото",
+      title: "Photo",
       type: "image",
       options: { hotspot: true },
       fields: [
         defineField({
           name: "alt",
-          title: "Альтернативный текст",
+          title: "Alt text",
           type: "string",
           validation: (r) => r.required(),
         }),
@@ -49,19 +49,26 @@ export const destination = defineType({
     }),
     defineField({
       name: "body",
-      title: "Подробное описание",
+      title: "Full description",
       type: "array",
       of: [{ type: "block" }],
     }),
     defineField({
+      name: "relatedTours",
+      title: "Related tours",
+      description: "Tours shown on this destination's page as \"Tours that visit X\".",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "tourPackage" }] }],
+    }),
+    defineField({
       name: "featured",
-      title: "Показывать на главной",
+      title: "Show on homepage",
       type: "boolean",
       initialValue: false,
     }),
     defineField({
       name: "order",
-      title: "Порядок сортировки",
+      title: "Sort order",
       type: "number",
       initialValue: 0,
     }),

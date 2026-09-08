@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import PageHero from "@/components/ui/PageHero";
 import ToursFilter from "@/components/tours/ToursFilter";
 import EnquiryCta from "@/components/sections/EnquiryCta";
-import { packages } from "@/lib/content/packages";
+import { getTourPackages } from "@/lib/sanity/queries";
 
 export const metadata: Metadata = {
   title: "Турпакеты",
@@ -11,7 +11,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tours" },
 };
 
-export default function ToursPage() {
+export default async function ToursPage() {
+  const packages = await getTourPackages();
+
   return (
     <>
       <PageHero

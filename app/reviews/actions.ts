@@ -58,7 +58,7 @@ export async function submitReview(
     rating,
     quote,
     date: new Date().toISOString().slice(0, 10),
-    source: "Сайт",
+    source: "Website",
     published: true,
   });
 

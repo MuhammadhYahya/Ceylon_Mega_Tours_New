@@ -3,15 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Check, Clock, Gauge, MessageCircle } from "lucide-react";
-import { blurProps } from "@/lib/images";
+import { mediaBlurProps } from "@/lib/images";
 import { ButtonLink } from "@/components/ui/Button";
 import PackageCard from "@/components/ui/PackageCard";
-import { packages, getPackageBySlug } from "@/lib/content/packages";
-import { site, whatsappLink } from "@/lib/site";
+import { getTourPackages, getTourPackageBySlug } from "@/lib/sanity/queries";
+import { whatsappLink } from "@/lib/site";
 
 type Params = { slug: string };
 
-export function generateStaticParams(): Params[] {
+export async function generateStaticParams(): Promise<Params[]> {
+  const packages = await getTourPackages();
   return packages.map((p) => ({ slug: p.slug }));
 }
 
@@ -21,7 +22,7 @@ export async function generateMetadata({
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const pkg = getPackageBySlug(slug);
+  const pkg = await getTourPackageBySlug(slug);
   if (!pkg) return {};
 
   return {
@@ -74,11 +75,12 @@ export default async function TourDetailPage({
   params: Promise<Params>;
 }) {
   const { slug } = await params;
-  const pkg = getPackageBySlug(slug);
+  const pkg = await getTourPackageBySlug(slug);
   if (!pkg) notFound();
 
   const groups = groupHighlights(pkg.highlights);
-  const related = packages
+  const allPackages = await getTourPackages();
+  const related = allPackages
     .filter((p) => p.slug !== pkg.slug && p.category === pkg.category)
     .slice(0, 3);
 
@@ -87,7 +89,10 @@ export default async function TourDetailPage({
     "@type": "TouristTrip",
     name: pkg.title,
     description: pkg.summary,
-    image: `${site.url}${pkg.image.src}`,
+    // pkg.image.src is already an absolute Sanity CDN URL — do not prefix
+    // it with site.url (that was only correct back when this was a local
+    // "/images/..." path).
+    image: pkg.image.src,
     touristType: "Частные туры",
     ...(pkg.priceUsd
       ? { offers: { "@type": "Offer", priceCurrency: "USD", price: pkg.priceUsd } }
@@ -113,7 +118,7 @@ export default async function TourDetailPage({
         <div className="relative aspect-[4/3] overflow-hidden rounded-card shadow-lift">
           <Image
             src={pkg.image.src}
-            {...blurProps(pkg.image.src)}
+            {...mediaBlurProps(pkg.image)}
             alt={pkg.image.alt}
             fill
             priority

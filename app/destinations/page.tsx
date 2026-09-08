@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import PageHero from "@/components/ui/PageHero";
 import DestinationCard from "@/components/ui/DestinationCard";
 import EnquiryCta from "@/components/sections/EnquiryCta";
-import { destinations } from "@/lib/content/destinations";
+import { getDestinations } from "@/lib/sanity/queries";
 
 export const metadata: Metadata = {
   title: "Направления",
@@ -11,7 +11,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/destinations" },
 };
 
-export default function DestinationsPage() {
+export default async function DestinationsPage() {
+  const destinations = await getDestinations();
+
   return (
     <>
       <PageHero

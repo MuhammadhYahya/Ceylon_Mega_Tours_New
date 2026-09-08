@@ -1,13 +1,16 @@
 /**
  * Content contract. These types are the boundary between the site and its
- * content source. `lib/content/*` implements them from local data today;
- * `lib/sanity/queries.ts` will implement the exact same shapes once the
- * Sanity project is connected, so no component has to change.
+ * content source — components import types, never a data source's shape
+ * directly. Tours, destinations, services, and reviews are all live Sanity
+ * queries now (`lib/sanity/queries.ts`); nothing reads from `lib/content/*`
+ * anymore.
  */
 
 export type Media = {
   src: string;
   alt: string;
+  /** Present for Sanity-sourced images (from the asset's metadata.lqip). */
+  blurDataURL?: string;
 };
 
 export type TourPackage = {
@@ -48,7 +51,6 @@ export type Review = {
 };
 
 export type Service = {
-  slug: string;
   icon: "compass" | "plane" | "car";
   eyebrow: string;
   title: string;
