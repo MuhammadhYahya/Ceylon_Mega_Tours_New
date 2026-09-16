@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Check, Clock, Gauge, MessageCircle } from "lucide-react";
+import { Check, Clock, MessageCircle, Users } from "lucide-react";
 import { mediaBlurProps } from "@/lib/images";
 import { ButtonLink } from "@/components/ui/Button";
 import PackageCard from "@/components/ui/PackageCard";
@@ -142,11 +142,13 @@ export default async function TourDetailPage({
               <dt className="sr-only">Длительность</dt>
               <dd>{pkg.duration}</dd>
             </div>
-            <div className="flex items-center gap-2">
-              <Gauge size={17} className="text-forest-600" aria-hidden="true" />
-              <dt className="sr-only">Сложность</dt>
-              <dd>{pkg.difficulty}</dd>
-            </div>
+            {pkg.suitableFor?.length ? (
+              <div className="flex items-center gap-2">
+                <Users size={17} className="text-forest-600" aria-hidden="true" />
+                <dt className="sr-only">Подходит для</dt>
+                <dd>{pkg.suitableFor.join(", ")}</dd>
+              </div>
+            ) : null}
           </dl>
 
           {pkg.priceUsd ? (

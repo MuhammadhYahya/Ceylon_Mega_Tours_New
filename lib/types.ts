@@ -25,7 +25,8 @@ export type TourPackage = {
    */
   priceUsd?: number;
   duration: string;
-  difficulty: string;
+  /** Optional. Empty or absent means no audience tags are rendered. */
+  suitableFor?: string[];
   image: Media;
   featured: boolean;
   highlights: string[];

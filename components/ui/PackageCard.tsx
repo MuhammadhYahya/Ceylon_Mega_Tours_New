@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Clock, Gauge } from "lucide-react";
+import { ArrowRight, Clock, Users } from "lucide-react";
 import { mediaBlurProps } from "@/lib/images";
 import type { TourPackage } from "@/lib/types";
 
@@ -40,11 +40,13 @@ export default function PackageCard({ pkg }: { pkg: TourPackage }) {
             <dt className="sr-only">Длительность</dt>
             <dd>{pkg.duration}</dd>
           </div>
-          <div className="flex items-center gap-1.5">
-            <Gauge size={15} aria-hidden="true" />
-            <dt className="sr-only">Сложность</dt>
-            <dd>{pkg.difficulty}</dd>
-          </div>
+          {pkg.suitableFor?.length ? (
+            <div className="flex items-center gap-1.5">
+              <Users size={15} aria-hidden="true" />
+              <dt className="sr-only">Подходит для</dt>
+              <dd>{pkg.suitableFor.join(", ")}</dd>
+            </div>
+          ) : null}
         </dl>
 
         <div className="mt-6 flex items-center justify-between gap-3 border-t border-sand-200 pt-5">
