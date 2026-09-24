@@ -13,6 +13,33 @@ export type Media = {
   blurDataURL?: string;
 };
 
+/**
+ * An icon chosen in Sanity. `id` indexes `lib/tourIcons.tsx`; `image` is the
+ * editor's own artwork and takes precedence when both are set. Both absent
+ * means a neutral default is drawn.
+ */
+export type TourIcon = {
+  id?: string;
+  image?: Media;
+};
+
+/** One card on the tour programme path. */
+export type TourStep = {
+  title: string;
+  subtitle?: string;
+  icon?: TourIcon;
+  /** Editor-chosen claim pill, e.g. "ТОП ВЫБОР". Never derived from position. */
+  badge?: string;
+  /** Groups steps under a shared heading on multi-day tours, e.g. "День 1". */
+  day?: string;
+};
+
+/** One card in "Что включено". */
+export type TourInclusion = {
+  text: string;
+  icon?: TourIcon;
+};
+
 export type TourPackage = {
   slug: string;
   title: string;
@@ -28,9 +55,24 @@ export type TourPackage = {
   /** Optional. Empty or absent means no audience tags are rendered. */
   suitableFor?: string[];
   image: Media;
+  /**
+   * Optional extra photos, shown as a filmstrip under the main photo on the
+   * tour detail page. Absent or empty means the main photo is shown alone,
+   * with no filmstrip — only the detail query fetches this.
+   */
+  gallery?: Media[];
   featured: boolean;
+  /**
+   * Legacy plain-text programme. Still rendered, but only when `programme`
+   * is empty — see `resolveSteps` in the tour detail page.
+   */
   highlights: string[];
+  /** Legacy plain-text inclusions, superseded by `inclusionItems`. */
   inclusions: string[];
+  /** Structured programme. Preferred over `highlights` when present. */
+  programme?: TourStep[];
+  /** Structured inclusions. Preferred over `inclusions` when present. */
+  inclusionItems?: TourInclusion[];
 };
 
 export type Destination = {

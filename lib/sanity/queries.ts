@@ -36,6 +36,41 @@ const IMAGE_PROJECTION = `
   "blurDataURL": image.asset->metadata.lqip
 `;
 
+// Same shape as IMAGE_PROJECTION, but for the `gallery` array, whose items
+// *are* the images — so the fields sit one level up, without the `image.`
+// prefix. Only the detail query asks for it; nothing in a listing renders a
+// gallery, and pulling every tour's extra photos into those queries would be
+// wasted payload.
+const GALLERY_PROJECTION = `"gallery": gallery[]{
+        "src": asset->url,
+        "alt": coalesce(alt, ""),
+        "blurDataURL": asset->metadata.lqip
+      }`;
+
+// The editor's icon choice, as stored on a programme step or an inclusion.
+// `image` is projected to null rather than an empty object when no custom
+// artwork was uploaded, so `icon.image?.src` is a reliable test on the site.
+const ICON_PROJECTION = `"icon": {
+          "id": icon,
+          "image": iconImage.asset->{ "src": url, "alt": "", "blurDataURL": metadata.lqip }
+        }`;
+
+// Structured programme and inclusions. Both are optional in the CMS and the
+// page falls back to the legacy string arrays, so a tour nobody has upgraded
+// yet still renders — see `resolveSteps` / `resolveInclusions`.
+const PROGRAMME_PROJECTION = `"programme": programme[]{
+        title,
+        subtitle,
+        badge,
+        day,
+        ${ICON_PROJECTION}
+      }`;
+
+const INCLUSION_ITEMS_PROJECTION = `"inclusionItems": inclusionItems[]{
+        text,
+        ${ICON_PROJECTION}
+      }`;
+
 export async function getTourPackages(): Promise<TourPackage[]> {
   "use cache";
   cacheTag("tours");
@@ -73,9 +108,12 @@ export async function getTourPackageBySlug(slug: string): Promise<TourPackage | 
       duration,
       suitableFor,
       "image": {${IMAGE_PROJECTION}},
+      ${GALLERY_PROJECTION},
       featured,
       highlights,
-      inclusions
+      inclusions,
+      ${PROGRAMME_PROJECTION},
+      ${INCLUSION_ITEMS_PROJECTION}
     }`,
     { slug }
   );

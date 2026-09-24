@@ -1,4 +1,44 @@
 import { defineField, defineType } from "sanity";
+import { TOUR_ICON_OPTIONS } from "./tourIconOptions";
+
+/**
+ * Wording for the little pills on a programme card. A fixed list, not free
+ * text: these are claims the business is making about a tour ("ТОП ВЫБОР"),
+ * so they stay deliberate and consistently worded rather than being invented
+ * per card — or worse, assigned automatically by position.
+ */
+const BADGE_OPTIONS = [
+  "ТОП ВЫБОР",
+  "РАННИЙ СТАРТ",
+  "ВЫБОР ГОСТЕЙ",
+  "ОБЯЗАТЕЛЬНО УВИДЕТЬ",
+  "ЛУЧШИЙ ФОТОСТОП",
+  "ОТЛИЧНО С ДЕТЬМИ",
+];
+
+/**
+ * Icon picker, shared by programme steps and inclusions. `icon` covers the
+ * common case from a fixed set; `iconImage` is the escape hatch for artwork
+ * the set doesn't have (there is no whale, dolphin or elephant in it) and
+ * wins over `icon` when both are filled.
+ */
+const iconFields = [
+  defineField({
+    name: "icon",
+    title: "Icon",
+    description:
+      "Site content — pick the icon shown in the circle. Leave empty for a neutral default.",
+    type: "string",
+    options: { list: TOUR_ICON_OPTIONS },
+  }),
+  defineField({
+    name: "iconImage",
+    title: "Custom icon (overrides the choice above)",
+    description:
+      "Optional. Upload your own drawing when nothing in the list fits — a whale or an elephant, say. Use a square PNG or SVG with a transparent background.",
+    type: "image",
+  }),
+];
 
 /**
  * Sanity's built-in slugifier strips Cyrillic, so a Russian title would
@@ -117,6 +157,30 @@ export const tourPackage = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: "gallery",
+      title: "Photo gallery",
+      description:
+        "Optional. Extra photos for this tour, shown as a scrollable filmstrip under the main photo — a visitor clicks one to move it into the large frame. Leave empty and only the main photo is shown, with no filmstrip.",
+      type: "array",
+      of: [
+        {
+          type: "image",
+          options: { hotspot: true },
+          fields: [
+            defineField({
+              name: "alt",
+              title: "Alt text",
+              type: "string",
+              description:
+                "Site content, in Russian — read by screen readers and search engines.",
+              validation: (r) => r.required(),
+            }),
+          ],
+        },
+      ],
+      options: { layout: "grid" },
+    }),
+    defineField({
       name: "featured",
       title: "Show on homepage",
       type: "boolean",
@@ -124,10 +188,59 @@ export const tourPackage = defineType({
     }),
     defineField({
       name: "highlights",
-      title: "Highlights",
-      description: "Site content, in Russian — one bullet per line.",
+      title: "Highlights (legacy)",
+      description:
+        "Older, plain-text version of the programme — one bullet per line. Used only when «Tour programme» below is empty, so a tour that hasn't been upgraded still renders. Fill in «Tour programme» instead for new work.",
       type: "array",
       of: [{ type: "string" }],
+    }),
+    defineField({
+      name: "programme",
+      title: "Tour programme",
+      description:
+        "Site content, in Russian — the steps shown along the winding path. Order here is the order on the site, and steps are numbered 01, 02, … automatically.",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "programmeStep",
+          fields: [
+            defineField({
+              name: "title",
+              title: "Title",
+              description: "The bold line on the card. Keep it short — 2–5 words reads best.",
+              type: "string",
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: "subtitle",
+              title: "Subtitle",
+              description:
+                "Optional. The smaller line under the title — one short sentence about what the guest actually does.",
+              type: "string",
+            }),
+            ...iconFields,
+            defineField({
+              name: "badge",
+              title: "Badge",
+              description:
+                "Optional pill above the card. Only add one where it is actually true — they read as a promise.",
+              type: "string",
+              options: { list: BADGE_OPTIONS },
+            }),
+            defineField({
+              name: "day",
+              title: "Day",
+              description:
+                'Optional, for multi-day tours — e.g. "День 1". Steps sharing a day are grouped under one heading.',
+              type: "string",
+            }),
+          ],
+          preview: {
+            select: { title: "title", subtitle: "subtitle", media: "iconImage" },
+          },
+        },
+      ],
     }),
     defineField({
       name: "itinerary",
@@ -152,10 +265,34 @@ export const tourPackage = defineType({
     }),
     defineField({
       name: "inclusions",
-      title: "What's included",
-      description: "Site content, in Russian — one line per item.",
+      title: "What's included (legacy)",
+      description:
+        "Older, plain-text version — one line per item. Used only when «What's included» below is empty. Fill in that one instead for new work.",
       type: "array",
       of: [{ type: "string" }],
+    }),
+    defineField({
+      name: "inclusionItems",
+      title: "What's included",
+      description:
+        "Site content, in Russian. Each item becomes a compact card with an icon — pick one below, or leave it and a neutral default is shown.",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "inclusionItem",
+          fields: [
+            defineField({
+              name: "text",
+              title: "Text",
+              type: "string",
+              validation: (r) => r.required(),
+            }),
+            ...iconFields,
+          ],
+          preview: { select: { title: "text", media: "iconImage" } },
+        },
+      ],
     }),
     defineField({
       name: "order",

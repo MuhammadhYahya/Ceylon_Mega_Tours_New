@@ -34,6 +34,13 @@
   --color-ochre-400: #d09343;
   --color-ochre-100: #f6e7cf;
 
+  /* Leaf — one yellow-green accent, scoped to the tour programme: the badge
+     pills and the beads on the dashed path. Sampled from the approved
+     design. Kept out of the general palette so it stays a signal there and
+     doesn't start competing with ochre elsewhere. */
+  --color-leaf-300: #cbdf74;
+  --color-leaf-100: #e8f0c4;
+
   /* Ink — text */
   --color-ink-900: #141714;
   --color-ink-700: #363c36;
@@ -69,6 +76,46 @@
   --shadow-lift: 0 2px 4px rgb(20 23 20 / 0.05), 0 20px 45px -20px rgb(20 23 20 / 0.22);
 
   --radius-card: 1.25rem;
+
+  /* Swap-in for the tour gallery's large frame */
+  --animate-fade-in: fade-in 0.4s ease both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* A photo strip that scrolls sideways; the bar is noise under thumbnails,
+   and the strip carries its own arrows on pointer devices. */
+@utility no-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Faint paper tooth for the tour programme band, so a large flat sand area
+   reads as stock rather than as an empty div. Generated noise rather than a
+   photo — it tiles, costs no request, and never pixelates. Pair it with a
+   background colour; the grain paints over whatever that is. */
+/* Step numbers on the tour programme trail: pale fill, drawn outline.
+   `paint-order` puts the fill on top of the stroke, so the stroke thickens
+   the glyph outward instead of eating into it and closing up the counters. */
+@utility step-numeral {
+  color: var(--color-forest-100);
+  -webkit-text-stroke: 2px var(--color-forest-700);
+  paint-order: stroke fill;
+}
+
+@utility paper-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23p)' opacity='0.05'/%3E%3C/svg%3E");
+  background-repeat: repeat;
 }
 
 /* next/font injects these; `inline` keeps the var reference intact */
@@ -130,5 +177,11 @@ body {
       animation-timeline: view();
       animation-range: entry 0% entry 40%;
     }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in {
+    animation: none;
   }
 }

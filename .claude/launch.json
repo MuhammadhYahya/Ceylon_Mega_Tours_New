@@ -12,6 +12,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["next", "dev", "-p", "3101"],
       "port": 3101
+    },
+    {
+      "name": "ceylon-studio",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "studio", "run", "dev", "--", "--port", "3333"],
+      "port": 3333
     }
   ]
 }
